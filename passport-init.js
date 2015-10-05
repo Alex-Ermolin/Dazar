@@ -1,47 +1,63 @@
 var LocalStrategy   = require('passport-local').Strategy;
 var bCrypt = require('bcrypt-nodejs');
-//temporary data store
-var users = {};
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
+var Post = mongoose.model('Post');
+
+
 module.exports = function(passport){
 
     // Passport needs to be able to serialize and deserialize users to support persistent login sessions
-    passport.serializeUser(function(user, done) {
-        console.log('serializing user:',user.username);
-        return done(null, user.username);
-    });
+    passport.serializeUser(function(user, done){
+            console.log('serializing user:', user.username);
+            return done(null, user.username);
+        });
 
-    passport.deserializeUser(function(username, done) {
-
-        return done('we have not implemented this', false);
-
+    passport.deserializeUser(function(username, done){
+        return done(null, users[username]);
     });
 
     passport.use('login', new LocalStrategy({
             passReqToCallback : true
         },
-        function(req, username, password, done) { 
+        function(req, username, password, done) {
 
-            return done('we have not implemented this', false);
+            if(!users[username]){
+                console.log('User Not Found with username '+username);
+                return done(null, false);
+            }
+
+            if(isValidPassword(users[username], password)){
+                //sucessfully authenticated
+                return done(null, users[username]);
+            }
+            else{
+                console.log('Invalid password ' + username);
+                return done(null, false)
+            }
         }
     ));
 
     passport.use('signup', new LocalStrategy({
-            passReqToCallback : true // allows us to pass back the entire request to the callback
-        },
-        function(req, username, password, done) {
 
-            //check whether that username already exists
-            if(users[username]) {
-                return done('username "' + username + '" is already taken', false);
-            }
-            //add a new user
-            users[username] = {
-                username: username,
-                password: createHash(password)
-            }
-            return done(null, users[username]);
-        })
-    );
+                passReqToCallback : true // allows us to pass back the entire request to the callback
+
+            },
+            function(req, username, password, done) {
+
+                //check whether that username already exists
+                if(users[username]) {
+                     return done(null, false , {messege:'username "' + username + '" is already taken'});
+
+                }
+                //add a new user
+                users[username] = {
+                    username: username,
+                    password: createHash(password)
+                }
+                return done(null, users[username]);
+            })
+        );
 
     var isValidPassword = function(user, password){
         return bCrypt.compareSync(password, user.password);
