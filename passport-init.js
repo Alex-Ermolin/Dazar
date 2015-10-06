@@ -8,16 +8,26 @@ module.exports = function(passport){
 
     // Passport needs to be able to serialize and deserialize users to support persistent login sessions
     passport.serializeUser(function(user, done) {
-        console.log('serializing user:',user.username);
+        console.log('serializing user:', user._id);
         //return the unique id for the user
-        done(null, user.username);
+        return done(null, user._id);
     });
 
     //Deserialize user will call with the unique id provided by serializer
-    passport.deserializeUser(function(username, done) {
+    passport.deserializeUser(function(id, done) {
 
-        return done(null, users[username]);
+            return done(null, User.findById((id,function(err,user){
+                if(err)
+                {
+                    var errMessage = "Can't deserialize using id :" +id+"err:"+err;
+                    return done(errMessage, false);
+                }
+                if(!user){
+                    return done("user not found in DB", false);
+                }
 
+                return done(null, user);
+            })))
     });
 
     passport.use('login', new LocalStrategy({
@@ -47,10 +57,6 @@ module.exports = function(passport){
 
             });
 
-            if(isValidPassword(users[username], password)) {
-                //successfully authenticated
-                return done(null, users[username]);
-            }
         }
     ));
 
