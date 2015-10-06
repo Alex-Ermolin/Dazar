@@ -47,9 +47,10 @@ module.exports = function(passport){
 
             });
 
-            if(isValidPassword(users[username], password)){
+            if(isValidPassword(users[username], password)) {
                 //successfully authenticated
                 return done(null, users[username]);
+            }
         }
     ));
 
@@ -83,17 +84,6 @@ module.exports = function(passport){
                 })
 
             });
-
-            ////check whether that username already exists
-            //if(users[username]) {
-            //    return done(null, false, {message: 'username "' + username + '" is already taken'});
-            //}
-            ////add a new user
-            //users[username] = {
-            //    username: username,
-            //    password: createHash(password)
-            //};
-            //return done(null, users[username]);
         })
     );
 
