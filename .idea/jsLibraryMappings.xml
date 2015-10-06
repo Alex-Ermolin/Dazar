@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+<<<<<<< HEAD
+    <file url="file://$PROJECT_DIR$" libraries="{Dazar node_modules}" />
+    <includedPredefinedLibrary name="Node.js Globals" />
+=======
+    <file url="file://$PROJECT_DIR$" libraries="{myApp node_modules}" />
+<<<<<<< HEAD
+>>>>>>> 38ac0b97c39b83b1c4deae8e84266cfc0bf9ac4d
+=======
+    <includedPredefinedLibrary name="Node.js Globals" />
+>>>>>>> b36afefacbad5a2bb81effa0e99e40e283371a76
+  </component>
+</project>
