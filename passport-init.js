@@ -85,10 +85,10 @@ module.exports = function(passport){
                 newUser.password = createHash(password);
                 newUser.save(function(err) {
                     if(err) {
-                        console.log('Error when trying to save new user: ' + err)
+                        console.log('Error when trying to save new user: ' + err);
                         throw err;
                     }
-                    console.log(newUser.useername + ' Successfully registered on Dazar!')
+                    console.log(newUser.username + ' Successfully registered on Dazar!');
                     return done(null, newUser);
                 })
 
