@@ -83,7 +83,7 @@ module.exports = function(passport){
                 }
 
                 var newUser = new User();
-                newUser.ussername = username;
+                newUser.username = username;
                 newUser.password = createHash(password);
                 newUser.save(function(err) {
                     if(err) {
