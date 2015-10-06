@@ -29,7 +29,7 @@ module.exports = function(passport){
                 return done('User not found in db!', false);
             }
 
-            //successfully deserialization
+            //successful deserialization
             return done(null, user);
         }));
 

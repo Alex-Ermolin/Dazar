@@ -6,8 +6,16 @@ var passport = require('passport');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+<<<<<<< HEAD
 var mongoose = require('mongoose')
 mongoose.connect("mogodb://localhost:27017/dazar-test");
+=======
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/dazar-test');
+require('./models/User');
+require('./models/Post');
+>>>>>>> 79d9cc09f1c033fbab5cee8ec62d1b22c545937b
 
 var api = require('./routes/api');
 // var authenticate = require('./routes/authenticate');
