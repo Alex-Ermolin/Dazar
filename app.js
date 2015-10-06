@@ -8,7 +8,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose')
 mongoose.connect("mogodb://localhost:27017/dazar-test");
-require('./models/models.js');
 
 var api = require('./routes/api');
 // var authenticate = require('./routes/authenticate');
@@ -36,8 +35,9 @@ app.use(passport.session());
 
 var initPassport = require('./passport-init');
 initPassport(passport);
-app.use('/api', api);
+require('./models/models.js');
 
+app.use('/api', api);
 app.use('/auth', authenticate);
 
 // catch 404 and forward to error handler

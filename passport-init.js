@@ -21,20 +21,21 @@ module.exports = function(passport){
             passReqToCallback : true
         },
         function(req, username, password, done) {
-
-            if(!users[username]){
-                console.log('User Not Found with username '+username);
-                return done(null, false);
-            }
-
-            if(isValidPassword(users[username], password)){
-                //sucessfully authenticated
-                return done(null, users[username]);
-            }
-            else{
-                console.log('Invalid password ' + username);
-                return done(null, false)
-            }
+            User.findOne({ 'username' :  username },
+                function(err, user) {
+                    if (err)
+                        return done(err);
+                    if (!user){
+                        console.log('User Not Found with username '+username);
+                        return done(null, false);
+                    }
+                    if (!isValidPassword(user, password)){
+                        console.log('Invalid Password');
+                        return done(null, false);
+                    }
+                    return done(null, user);
+                }
+            );
         }
     ));
 
@@ -45,17 +46,30 @@ module.exports = function(passport){
             },
             function(req, username, password, done) {
 
-                //check whether that username already exists
-                if(users[username]) {
-                     return done(null, false , {messege:'username "' + username + '" is already taken'});
+                User.findOne({ username : username },function(err, user ) {
+                    if(err){
+                        return done('db error:' + err, false);
 
-                }
-                //add a new user
-                users[username] = {
-                    username: username,
-                    password: createHash(password)
-                }
-                return done(null, users[username]);
+                    }
+                    if(user){
+                        return done('User name ' + username + ' is taken', false );
+
+                    }
+
+                    var newUser = new User();
+                    newUser.username = username;
+                    newUser.password = createHash(password);
+                    newUser.save(function(err){
+                        if(err) {
+                            console.log('error : ' + err);
+                            throw err;
+                        }
+
+                        console.log(newUser.username + 'Successfully registered on Dazar');
+                        return done(null, newUser);
+
+                    });
+                });
             })
         );
 
