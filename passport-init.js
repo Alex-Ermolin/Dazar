@@ -8,7 +8,8 @@ module.exports = function(passport){
 
     // Passport needs to be able to serialize and deserialize users to support persistent login sessions
     passport.serializeUser(function(user, done) {
-        console.log('serializing user:', user._id);
+
+        console.log('serializing user:',user._id);
         //return the unique id for the user
         return done(null, user._id);
     });
@@ -16,18 +17,23 @@ module.exports = function(passport){
     //Deserialize user will call with the unique id provided by serializer
     passport.deserializeUser(function(id, done) {
 
-            return done(null, User.findById((id,function(err,user){
-                if(err)
-                {
-                    var errMessage = "Can't deserialize using id :" +id+"err:"+err;
-                    return done(errMessage, false);
-                }
-                if(!user){
-                    return done("user not found in DB", false);
-                }
+        return done(null, User.findById(id, function(err, user) {
+            //If there is a db error
+            if(err) {
+                var errMessage = "Can't deserialize using id " + id + ", error: " + err;
+                return done(errMessage, false);
+            }
 
-                return done(null, user);
-            })))
+            //if a user with that id is not found
+            if(!user) {
+                return done('User not found in db!', false);
+            }
+
+            //successfully deserialization
+            return done(null, user);
+        }));
+
+
     });
 
     passport.use('login', new LocalStrategy({
@@ -56,7 +62,6 @@ module.exports = function(passport){
                 return done(null, user);
 
             });
-
         }
     ));
 
@@ -82,10 +87,10 @@ module.exports = function(passport){
                 newUser.password = createHash(password);
                 newUser.save(function(err) {
                     if(err) {
-                        console.log('Error when trying to save new user: ' + err)
+                        console.log('Error when trying to save new user: ' + err);
                         throw err;
                     }
-                    console.log(newUser.useername + ' Successfully registered on Dazar!')
+                    console.log(newUser.username + ' Successfully registered on Dazar!');
                     return done(null, newUser);
                 })
 
