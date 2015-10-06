@@ -6,12 +6,20 @@ var passport = require('passport');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+<<<<<<< HEAD
 var mongoose = require('mongoose')
 mongoose.connect("mogodb://localhost:27017/dazar-test");
 
 var api = require('./routes/api');
 // var authenticate = require('./routes/authenticate');
 var authenticate = require('./routes/authenticate')(passport);
+=======
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/dazar-test');
+
+var api = require('./routes/api');
+>>>>>>> 38ac0b97c39b83b1c4deae8e84266cfc0bf9ac4d
 
 var app = express();
 
@@ -23,7 +31,10 @@ app.set('view engine', 'ejs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(session({
+<<<<<<< HEAD
 
+=======
+>>>>>>> 38ac0b97c39b83b1c4deae8e84266cfc0bf9ac4d
   secret: 'super secret'
 }));
 app.use(bodyParser.json());
@@ -33,11 +44,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
+<<<<<<< HEAD
 var initPassport = require('./passport-init');
 initPassport(passport);
 require('./models/models.js');
 
 app.use('/api', api);
+=======
+//Initialize passport
+var initPassport = require('./passport-init');
+initPassport(passport);
+
+require('./models/models.js');
+
+var authenticate = require('./routes/authenticate')(passport);
+
+app.use('/api', api);
+// app.use('/auth', authenticate);
+>>>>>>> 38ac0b97c39b83b1c4deae8e84266cfc0bf9ac4d
 app.use('/auth', authenticate);
 
 // catch 404 and forward to error handler
