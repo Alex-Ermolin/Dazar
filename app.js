@@ -9,8 +9,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost:27017/dazar-test');
-require('./models/User');
-require('./models/Post');
+require('./models/models');
 
 var api = require('./routes/api');
 
