@@ -33,10 +33,12 @@ router.route('/posts/:id')
 	.get(function(req, res) {
 		res.send({message: 'TODO: return post with id ' + req.params.id});
 	})
+
 	//update existing post
 	.put(function(req, res) {
 		res.send({message: 'TODO: update existing post with id ' + req.params.id});
 	})
+
 	//delete existing post
 	.delete(function(req, res) {
 		res.send({message: 'TODO: delete existing post with id ' + req.params.id});

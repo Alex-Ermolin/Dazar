@@ -8,7 +8,6 @@ module.exports = function(passport){
 
     // Passport needs to be able to serialize and deserialize users to support persistent login sessions
     passport.serializeUser(function(user, done) {
-
         console.log('serializing user:',user._id);
         //return the unique id for the user
         return done(null, user._id);
@@ -16,8 +15,8 @@ module.exports = function(passport){
 
     //Deserialize user will call with the unique id provided by serializer
     passport.deserializeUser(function(id, done) {
+        User.findById(id, function(err, user) {
 
-        return done(null, User.findById(id, function(err, user) {
             //If there is a db error
             if(err) {
                 var errMessage = "Can't deserialize using id " + id + ", error: " + err;
@@ -30,10 +29,9 @@ module.exports = function(passport){
             }
 
             //successful deserialization
+            console.log('deserializing user: ' + user.username);
             return done(null, user);
-        }));
-
-
+        });
     });
 
     passport.use('login', new LocalStrategy({
@@ -84,8 +82,13 @@ module.exports = function(passport){
 
                 //if the username is available create a new user
                 var newUser = new User();
+
+                //set username and password for new user
                 newUser.username = username;
                 newUser.password = createHash(password);
+                console.log('hello');
+
+                //save new user in db
                 newUser.save(function(err) {
                     if(err) {
                         console.log('Error when trying to save new user: ' + err);
@@ -94,7 +97,6 @@ module.exports = function(passport){
                     console.log(newUser.username + ' Successfully registered on Dazar!');
                     return done(null, newUser);
                 })
-
             });
         })
     );
