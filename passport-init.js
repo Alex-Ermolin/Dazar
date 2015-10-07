@@ -77,11 +77,12 @@ module.exports = function(passport){
                     return done('db error: ' + err, false);
                 }
 
-                //if the user is found, check if the password is correct
+                //if the user is found, say that this username is taken
                 if(user) {
                     return done('Username ' + username + ' is taken!', false);
                 }
 
+                //if the username is available create a new user
                 var newUser = new User();
                 newUser.username = username;
                 newUser.password = createHash(password);
