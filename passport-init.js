@@ -86,7 +86,6 @@ module.exports = function(passport){
                 //set username and password for new user
                 newUser.username = username;
                 newUser.password = createHash(password);
-                console.log('hello');
 
                 //save new user in db
                 newUser.save(function(err) {
