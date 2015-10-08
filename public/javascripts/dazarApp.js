@@ -32,7 +32,7 @@ dazarApp.config(function($routeProvider) {
         })
 });
 
-dazarApp.controller('myController', function($scope){
+dazarApp.controller('mainController', function($scope){
     $scope.posts = [];
     $scope.newPost = {created_by: '', text: '', created_at: ''};
 
