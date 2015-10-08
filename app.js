@@ -43,6 +43,7 @@ require('./models/models.js');
 
 var authenticate = require('./routes/authenticate')(passport);
 
+app.use('/', index);
 app.use('/auth', authenticate);
 app.use('/api', api);
 
