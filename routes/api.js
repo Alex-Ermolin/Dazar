@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Post = mongoose.model('Post');
+var Edit = mongoose.model('Edit');
 
 //Used for routes that must be authenticated.
 function isAuthenticated(req, res, next) {
@@ -68,7 +69,26 @@ router.route('/posts/:id')
 			if(err) {
 				res.send(500, err);
 			}
+
+			//create and save a new edit object
+			var newEdit = new Edit();
+			newEdit.edited_by = req.body.edited_by;
+			if(req.body.editing_reason) {
+				newEdit.editing_reason = req.body.editing_reason;
+			}
+			newEdit.save(function(err) {
+				if(err) {
+					return res.send(500, err);
+				}
+			});
+
+			//change the text in the original post
 			post.text = req.body.text;
+
+			//add the newest edit to the array of edits of the post
+			post.edits.push(newEdit);
+
+			//save the changes made to post
 			post.save(function(err, post) {
 				if(err) {
 					return res.send(500, err);
