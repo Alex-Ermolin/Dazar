@@ -48,12 +48,12 @@ module.exports = function(passport){
 
                 //if the username is not found
                 if(!user) {
-                    return done('Username ' + username + ' not found!', false);
+                    return done(null, false, req.flash('errMsg', 'Username ' + username + ' not found!'));
                 }
 
                 //if the password is incorrect
                 if(!isValidPassword(user, password)) {
-                    return done('Invalid password!', false)
+                    return done(null, false, req.flash('errMsg', 'Invalid password!'));
                 }
 
                 //successful login
@@ -77,7 +77,7 @@ module.exports = function(passport){
 
                 //if the user is found, say that this username is taken
                 if(user) {
-                    return done('Username ' + username + ' is taken!', false);
+                    return done(null, false, req.flash('errMsg', 'Username ' + username + ' is taken!'));
                 }
 
                 //if the username is available create a new user
