@@ -72,6 +72,8 @@ router.route('/posts/:id')
 
 			//create and save a new edit object
 			var newEdit = new Edit();
+
+			//TODO: make it so that the default value of edited_by is the current user
 			newEdit.edited_by = req.body.edited_by;
 			if(req.body.editing_reason) {
 				newEdit.editing_reason = req.body.editing_reason;
