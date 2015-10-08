@@ -41,7 +41,9 @@ initPassport(passport);
 
 require('./models/models.js');
 
-var authenticate = require('./routes/authenticate')(passport);
+var authenticate = require('./routes/authenticate')(passport)
+
+var index = require('./routes/index');
 
 app.use('/', index);
 app.use('/auth', authenticate);
