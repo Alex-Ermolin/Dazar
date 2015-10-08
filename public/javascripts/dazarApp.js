@@ -1,6 +1,6 @@
 var myApp = angular.module('myApp', []);
 myApp.controller('myController', function($scope){
-    $scope.posts = [];
+    $scope.posts = []
     $scope.newPost = {created_by: '', text: '', created_at: ''};
 
     $scope.post = function(){

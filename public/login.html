@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Dazar</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../public/stylesheets/style.css">
+  </head>
+  <body ng-app="myApp">
+     <div id='main' class="container" ng-controller="authController">
+      <form class="form-auth" ng-submit="login()">
+        <h2>Login</h2>
+        <p class="text-warning">{{error_message}}</p>
+        <input type="username" ng-model="user.username" placeholder="Username" class="form-control"><br>
+        <input type="password" ng-model="user.password" placeholder="Password" class="form-control"><br>
+        <input type="submit" value="Login" class="btn btn-primary" />
+      </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+    <script src="../../javascript/dazarApp.js"></script>
+  </body>
+</html>
