@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var mongoose = require('mongoose');
+var Post = mongoose.model('Post');
 
 //Used for routes that must be authenticated.
-function isAuthenticated (req, res, next) {
+function isAuthenticated(req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler
 	// Passport adds this method to request object. A middleware is allowed to add properties to
 	// request and response objects
@@ -17,31 +19,74 @@ function isAuthenticated (req, res, next) {
 
 	// if the user is not authenticated then redirect him to the login page
 	return res.redirect('/#login');
-};
+}
 
 router.use('/posts', isAuthenticated);
 
-router.route('/posts').get(function(req, res) {
-	res.send({message: 'TODO: show all posts'});
-}).post(function(req, res) {
-	res.send({message: 'TODO: add a new post'});
+router.route('/posts')
+
+	//show all posts
+	.get(function(req, res) {
+		Post.find(function(err, posts) {
+			if(err) {
+				return res.send(500, err);
+			}
+			return res.send(200, posts);
+		});
+	})
+
+	//create a new post
+	.post(function(req, res) {
+		var newPost = new Post();
+		newPost.text = req.body.text;
+		newPost.created_by = req.body.created_by;
+		newPost.save(function(err, post) {
+			if(err) {
+				return res.send(500, err);
+			}
+			return res.json(post);
+		});
 });
 
 router.route('/posts/:id')
 	
 	//returns a post based on id in url
 	.get(function(req, res) {
-		res.send({message: 'TODO: return post with id ' + req.params.id});
+		var postId = req.params.id;
+		Post.findById(postId, function(err, post) {
+			if(err) {
+				return res.send(500, err);
+			}
+			return res.json(post);
+		});
 	})
 
 	//update existing post
 	.put(function(req, res) {
-		res.send({message: 'TODO: update existing post with id ' + req.params.id});
+		var postId = req.params.id;
+		Post.findById(postId, function(err, post) {
+			if(err) {
+				res.send(500, err);
+			}
+			post.text = req.body.text;
+			post.save(function(err, post) {
+				if(err) {
+					return res.send(500, err);
+				}
+				return res.json(post);
+			});
+		});
 	})
 
 	//delete existing post
 	.delete(function(req, res) {
-		res.send({message: 'TODO: delete existing post with id ' + req.params.id});
+		var postId = req.params.id;
+		Post.remove({_id: postId}, function(err) {
+			if(err) {
+				return res.send(500, err);
+			}
+			return res.json({message: 'removed post with id ' + postId});
+		});
 	});
 
 module.exports = router;

@@ -43,9 +43,8 @@ require('./models/models.js');
 
 var authenticate = require('./routes/authenticate')(passport);
 
-app.use('/api', api);
-// app.use('/auth', authenticate);
 app.use('/auth', authenticate);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
